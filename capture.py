@@ -85,7 +85,7 @@ class TOD(object):
         return feature_vector
 # TOD class end
 
-# Main program start from here
+# Main program starts from here
 if __name__ == '__main__':
     file_name = 'rnn6-x/raw-data/training_data' + str(int(time.time())) + '.npy'      #file for save training data
     if os.path.isfile(file_name):                                                     #check file
