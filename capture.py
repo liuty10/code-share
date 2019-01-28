@@ -110,6 +110,8 @@ if __name__ == '__main__':
             screen = cv2.cvtColor(screen, cv2.COLOR_BGR2RGB)                          # convert image into gray image
             figure_vector 	= [detector.detect(screen),output_keys]                   # calculate feature of this image and combine it with key. 
             #figure_vector  = [screen, output_keys]                                   # If you are only interested in the image and corresponding key, you do not need to calculate the feature
+                                                                                      # and you also do not need the TOD class.
+            
             training_data.append(figure_vector)                                       # add this new record into training_data
 
             if len(training_data) % 100 == 0:
