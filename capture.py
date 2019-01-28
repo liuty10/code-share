@@ -30,108 +30,60 @@ class TOD(object):
                 tf.import_graph_def(od_graph_def, name='')
         return detection_graph
 
-
-
     def _load_label_map(self):
         label_map	= label_map_util.load_labelmap(self.PATH_TO_LABELS)
         categories	= label_map_util.convert_label_map_to_categories(label_map,max_num_classes=self.NUM_CLASSES,use_display_name=True)
         category_index	= label_map_util.create_category_index(categories)
         return category_index
 
-
-
     def detect(self, image):
-
         with self.detection_graph.as_default():
-
             with tf.Session(graph=self.detection_graph) as sess:
-
                 image_np_expanded = np.expand_dims(image, axis=0)
-
                 image_tensor	  = self.detection_graph.get_tensor_by_name('image_tensor:0')
-
                 boxes		  = self.detection_graph.get_tensor_by_name('detection_boxes:0')
-
                 scores		  = self.detection_graph.get_tensor_by_name('detection_scores:0')
-
                 classes		  = self.detection_graph.get_tensor_by_name('detection_classes:0')
-
                 num_detections	  = self.detection_graph.get_tensor_by_name('num_detections:0')
 
-
-
                 (boxes, scores, classes, num_detections) = sess.run(
-
                        [boxes, scores, classes, num_detections],
-
                        feed_dict={image_tensor: image_np_expanded})
 
                 #print(num_detections)
-
                 box_centers=vis_util.visualize_realboxes_and_labels_on_image_array(
-
                        image,
-
                        np.squeeze(boxes),
-
                        np.squeeze(classes).astype(np.int32),\
-
                        np.squeeze(scores),
-
                        self.category_index,
-
                        use_normalized_coordinates=True,
-
                        line_thickness = 8)
 
                 if len(box_centers) <= 0:
-
                     box_centers = [self.last_box_center[0]+1,self.last_box_center[1]+1]
-
                     feature_vector = self.shape + self.last_box_center + box_centers
-
                     self.last_box_center = box_centers
-
                 else:
-
                     feature_vector = self.shape + self.last_box_center + box_centers[0]
-
                     self.last_box_center = box_centers[0]
 
-
-
         cv2.namedWindow("detection", cv2.WINDOW_NORMAL)
-
         cv2.imshow("detection", image)
-
         return feature_vector
 
 if __name__ == '__main__':
-
     file_name = 'rnn6-x/raw-data/training_data' + str(int(time.time())) + '.npy'
-
     if os.path.isfile(file_name):
-
         print('File exists, loading previous data!')
-
         training_data = list(np.load(file_name))
-
     else:
-
         print('File does not exist, starting fresh!')
-
         training_data = []
 
-
-
     for i in list(range(4))[::-1]:
-
         print(i+1)
-
         time.sleep(1)
-
-
-
 
     with mss.mss(display=':0.0') as sct:
         region={'top': 65, 'left': 64, 'width': 1020, 'height': 750}
