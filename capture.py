@@ -84,34 +84,34 @@ class TOD(object):
         return feature_vector
 
 if __name__ == '__main__':
-    file_name = 'rnn6-x/raw-data/training_data' + str(int(time.time())) + '.npy'
-    if os.path.isfile(file_name):
+    file_name = 'rnn6-x/raw-data/training_data' + str(int(time.time())) + '.npy'      #file for save training data
+    if os.path.isfile(file_name):                                                     #check file
         print('File exists, loading previous data!')
         training_data = list(np.load(file_name))
     else:
         print('File does not exist, starting fresh!')
         training_data = []
 
-    for i in list(range(4))[::-1]:
+    for i in list(range(4))[::-1]:                                                    #delay 4 seconds
         print(i+1)
         time.sleep(1)
 
-    with mss.mss(display=':0.0') as sct:
-        region={'top': 65, 'left': 64, 'width': 1020, 'height': 750}
-        detector = TOD()
+    with mss.mss(display=':0.0') as sct:                                              # create resource to capture screen
+        region={'top': 65, 'left': 64, 'width': 1020, 'height': 750}                  # define region of intrest
+        detector = TOD()                                                              # an instance of class TOD
         while(True):
             last_time = time.time()
             print('Frame took {} seconds'.format(time.time()-last_time))
-            screen = np.array(sct.grab(region))
-            output_keys 	= check_keys() #only one hot key:[1,0,0] or [0,1,0] or [0,0,1]
-            screen = cv2.cvtColor(screen, cv2.COLOR_BGR2RGB)
-            figure_vector 	= [detector.detect(screen),output_keys]
-            print(figure_vector)
-            training_data.append(figure_vector)
+            screen = np.array(sct.grab(region))                                       # grab screen and convert it into array
+            output_keys 	= check_keys() #only one hot key:[1,0,0] or [0,1,0] or [0,0,1]  #check which key is pressed on keybaord
+            screen = cv2.cvtColor(screen, cv2.COLOR_BGR2RGB)                          # convert image into gray image
+            figure_vector 	= [detector.detect(screen),output_keys]                   # calculate feature of this image and combine it with key. 
+            print(figure_vector)                                                      # If you are only interested in the image and corresponding key, you do not need to calculate the feature
+            training_data.append(figure_vector)                                       # add this new record into training_data
 
             if len(training_data) % 100 == 0:
                 print(len(training_data))
-                np.save(file_name, training_data)
+                np.save(file_name, training_data)                                     # save training data into xx.npy file
 
             if cv2.waitKey(25) & 0xFF == ord('q'):
                 cv2.destroyAllWindow()
