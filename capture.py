@@ -109,7 +109,7 @@ if __name__ == '__main__':
             output_keys 	= check_keys() #only one hot key:[1,0,0] or [0,1,0] or [0,0,1]  #check which key is pressed on keybaord
             screen = cv2.cvtColor(screen, cv2.COLOR_BGR2RGB)                          # convert image into gray image
             figure_vector 	= [detector.detect(screen),output_keys]                   # calculate feature of this image and combine it with key. 
-            print(figure_vector)                                                      # If you are only interested in the image and corresponding key, you do not need to calculate the feature
+            #figure_vector  = [screen, output_keys]                                   # If you are only interested in the image and corresponding key, you do not need to calculate the feature
             training_data.append(figure_vector)                                       # add this new record into training_data
 
             if len(training_data) % 100 == 0:
