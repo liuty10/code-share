@@ -21,6 +21,7 @@ def check_keys():
         keys = [0,0,0]
     return keys
 
+# TOD class start
 class TOD(object):
     def __init__(self):
         self.PATH_TO_CKPT 	= '/home/tianyiliu/Documents/workspace/gaming/myprojects/renderBench/modelData/supertuxkart/models/frozen_inference_graph.pb'
@@ -82,7 +83,9 @@ class TOD(object):
         cv2.namedWindow("detection", cv2.WINDOW_NORMAL)
         cv2.imshow("detection", image)
         return feature_vector
+# TOD class end
 
+# Main program start from here
 if __name__ == '__main__':
     file_name = 'rnn6-x/raw-data/training_data' + str(int(time.time())) + '.npy'      #file for save training data
     if os.path.isfile(file_name):                                                     #check file
