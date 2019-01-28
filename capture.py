@@ -5,10 +5,21 @@ import cv2
 import time
 import os
 import mss
-import keyboard_action
+import keyboard
 import tensorflow as tf
 from object_detection.utils import label_map_util
 from object_detection.utils import visualization_utils as vis_util
+
+def check_keys():
+    if keyboard.is_pressed('left'):
+        keys = [1,0,0]
+    elif keyboard.is_pressed('right'):
+        keys = [0,0,1]
+    elif keyboard.is_pressed('up'):
+        keys = [0,1,0]
+    else:
+        keys = [0,0,0]
+    return keys
 
 class TOD(object):
     def __init__(self):
@@ -92,7 +103,7 @@ if __name__ == '__main__':
             last_time = time.time()
             print('Frame took {} seconds'.format(time.time()-last_time))
             screen = np.array(sct.grab(region))
-            output_keys 	= keyboard_action.check_keys() #only one hot key:[1,0,0] or [0,1,0] or [0,0,1]
+            output_keys 	= check_keys() #only one hot key:[1,0,0] or [0,1,0] or [0,0,1]
             screen = cv2.cvtColor(screen, cv2.COLOR_BGR2RGB)
             figure_vector 	= [detector.detect(screen),output_keys]
             print(figure_vector)
